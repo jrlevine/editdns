@@ -1,0 +1,40 @@
+{% extends "dnsedit/base.html" %}
+{% block title %}DNS zone editor{% endblock %}
+
+{% block content %}
+<h1>Available domains</h1>
+<center>
+   <table>
+      <tr>
+	 <td valign="top" class="wx">
+	    <p>{% for d in c1 %}
+	       <a href="/dnsedit/edit/{{d}}">{{d}}</a><br/>
+	       {% endfor %}
+	    </p>
+	 </td>
+	 <td valign="top" class="wx">
+	    <p>{% for d in c2 %}
+	       <a href="/dnsedit/edit/{{d}}">{{d}}</a><br/>
+	       {% endfor %}
+	    </p>
+	 </td>
+	 <td valign="top" class="wx">
+	    <p>{% for d in c3 %}
+	       <a href="/dnsedit/edit/{{d}}">{{d}}</a><br/>
+	       {% endfor %}
+	    </p>
+	 </td>
+	 <td valign="top" class="wx">
+	    <p>{% for d in c4 %}
+	       <a href="/dnsedit/edit/{{d}}">{{d}}</a><br/>
+	       {% endfor %}
+	    </p>
+	 </td>
+      </tr>
+   </table>
+</center>
+
+{% endblock %}
+
+
+   
