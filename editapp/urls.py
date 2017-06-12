@@ -4,7 +4,7 @@ from django.conf.urls import url
 
 from . import views
 
-app_name = 'dnsedit'
+app_name = 'editapp'
 urlpatterns = [
     url(r'^$', views.indexview, name='index'),
     url(r'^create$', views.createview, name='create'),
