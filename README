@@ -1,8 +1,9 @@
 DNS editing sample app
 
-This is a simple django app that uses the extlang library to edit
-DNS zones.  Install it the usual way, create users in the django
-admin.  There is one extra permission flag:
+This is a simple django app that uses the extlang library to edit DNS
+zones.  Install it the usual way, make migrations for editapp, migrate
+to create the database, then create users in the django admin.  There
+is one extra permission flag:
 
   editapp | domain | Can see all users' domains
 
