@@ -15,9 +15,18 @@ class DomainForm(forms.Form):
 
 class ShortDomainForm(forms.Form):
     """
-    simple form to create or edit a new domain
+    simple form to create a new domain
     when editing, view code handles the individual records
     """
 
     domain = forms.CharField(label='Domain name', max_length=64)
     owner = forms.CharField(label='User name', max_length=20, required=False)
+
+class DomainEditForm(forms.Form):
+    """
+    simple form to edit a domain
+    when editing, view code handles the individual records
+    """
+
+    domain = forms.CharField(label='Domain name', max_length=64)
+    owner = forms.CharField(label='User name', max_length=20)

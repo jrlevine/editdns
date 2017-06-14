@@ -6,7 +6,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.db.models.functions import Substr
 from django.utils import timezone
-from .forms import DomainForm, ShortDomainForm
+from .forms import DomainForm, ShortDomainForm, DomainEditForm
 from .formsextlang import extxl, RRForm, CommentForm
 from .models import Domain
 from django.contrib.auth.models import User
@@ -119,7 +119,7 @@ def editview(request, domainname, postok=True):
         if 'block' in request.POST:      # block edit button
             return editblockview(request, domainname, postok=False)
 
-        form = ShortDomainForm(request.POST)
+        form = DomainEditForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
             owner = cd['owner'] if cd['owner'] else request.user.username # non-priv can't change owner
@@ -132,7 +132,7 @@ def editview(request, domainname, postok=True):
             dom.save()
         # otherwise fall through to edit again
     else:
-        form = ShortDomainForm(initial={'domain': dom.domain, 'owner': dom.owner.username })
+        form = DomainEditForm(initial={'domain': dom.domain, 'owner': dom.owner.username })
 
     # make records individually editable
     rrls = dnsextlang.ExtrecList(extxl, dom.rrs)
