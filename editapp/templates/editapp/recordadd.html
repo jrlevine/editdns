@@ -1,0 +1,19 @@
+{% extends "editapp/base.html" %}
+{% block title %}Edit a domain{% endblock %}
+{% load staticfiles %}
+
+{% block content %}
+<h1>Add a domain record</h1>
+<blockquote>
+    <table>
+       <form action="{% url 'editapp:recordadd' domain %}" method="post">
+	  {% csrf_token %}
+	  {{ form }}
+	  <tr><td colspan=2 align="right">
+	     <input type="submit" value="Submit" /></td>
+	  </tr>
+    </table>
+    </form>
+</blockquote>
+
+{% endblock %}

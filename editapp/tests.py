@@ -1,5 +1,5 @@
 from django.test import TestCase, Client
-from editapp.models import Domain
+from .models import Domain
 from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import datetime
@@ -23,8 +23,8 @@ class EditappTestCase(TestCase):
 
 
     def test_login(self):
-        r2 = self.c.get('/dnsedit')
-        print(r2)
+        r2 = self.c.get('/edit')
+        print(r2.content.decode())
         
 # test create a domain
 

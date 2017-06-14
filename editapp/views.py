@@ -21,7 +21,7 @@ def indexview(request):
     """
 
     domdb = Domain.objects
-    if not request.user.has_perm('dnsedit.see_all'): # only see mine
+    if not request.user.has_perm('editapp.see_all'): # only see mine
         domdb = domdb.filter(owner__username=request.user.username)
     domains = [ d.domain for d in domdb.order_by('domain') ]
 
@@ -30,7 +30,7 @@ def indexview(request):
     dslice = int((len(domains)+3)/4)
     c1,c2,c3,c4 = [ [d for d in domains[n*dslice:(n+1)*dslice]] for n in range(4) ]
 
-    return render(request, 'dnsedit/index.html',
+    return render(request, 'editapp/index.html',
         {
             'c1': c1, 'c2': c2, 'c3': c3, 'c4': c4,
             'bpnav': bpnav(request, 'index')
@@ -62,7 +62,7 @@ def createview(request):
         # otherwise fall through to try again
     else:
         form = ShortDomainForm(initial={'owner': request.user.username })
-    return render(request, 'dnsedit/create.html',
+    return render(request, 'editapp/create.html',
         {
             'form': form,
             'bpnav': bpnav(request, 'create')
@@ -90,12 +90,13 @@ def editblockview(request, domainname, postok=True):
 
             dom.ownerdb = ownerdb
             dom.rrs=cd['rrs']
+            dom.updated = timezone.now()
             dom.save()
         # otherwise fall through to edit again
     else:
         form = DomainForm(initial={'domain': dom.domain, 'owner': dom.owner.username, 'rrs': dom.rrs})
 
-    return render(request, 'dnsedit/editblock.html',
+    return render(request, 'editapp/editblock.html',
         {
             'form': form,
             'domain': domainname,
@@ -125,7 +126,9 @@ def editview(request, domainname, postok=True):
             ownerdb = User.objects.get(username=owner)
 
             dom.ownerdb = ownerdb
+            dom.updated = timezone.now()
             # post doesn't change records, only maybe the owner
+            dom.updated = timezone.now()
             dom.save()
         # otherwise fall through to edit again
     else:
@@ -139,7 +142,7 @@ def editview(request, domainname, postok=True):
     # spinner for new RRs
     addspinner = extxl.rrnames(select="rrname")
 
-    return render(request, 'dnsedit/edit.html',
+    return render(request, 'editapp/edit.html',
         {
             'form': form,
             'domain': domainname,
@@ -175,6 +178,7 @@ def recordview(request, domainname, recno):
                 else:
                     rrlist[lineno] = form.cleaned_data.get('comment')
                 dom.rrs = "\n".join(rrlist)
+                dom.updated = timezone.now()
                 dom.save()
                 return editview(request, domainname, postok=False)
         else:
@@ -186,6 +190,7 @@ def recordview(request, domainname, recno):
                 else:
                     rrlist[lineno] = form.cleaned_data.get('dnsrecord')
                 dom.rrs = "\n".join(rrlist)
+                dom.updated = timezone.now()
                 dom.save()
                 return editview(request, domainname, postok=False)
 
@@ -198,7 +203,7 @@ def recordview(request, domainname, recno):
         else:
             form = RRForm(record)
     
-    return render(request, 'dnsedit/record.html',
+    return render(request, 'editapp/record.html',
         {
             'form': form,
             'domain': domainname,
@@ -226,6 +231,7 @@ def recordaddview(request, domainname):
                 rrlist = dom.rrs.splitlines()
                 rrlist.append(form.cleaned_data.get('comment'))
                 dom.rrs = "\n".join(rrlist)
+                dom.updated = timezone.now()
                 dom.save()
                 return editview(request, domainname, postok=False)
         else:                           # Add button
@@ -234,15 +240,16 @@ def recordaddview(request, domainname):
                 rrlist = dom.rrs.splitlines()
                 rrlist.append(form.cleaned_data.get('dnsrecord'))
                 dom.rrs = "\n".join(rrlist)
+                dom.updated = timezone.now()
                 dom.save()
-                return editview(request, domainname)
+                return editview(request, domainname, postok=False)
 
         # otherwise fall through to edit again
     else:
         rrname = request.POST['rrname']
         form = RRForm(rrname=rrname)
 
-    return render(request, 'dnsedit/recordadd.html',
+    return render(request, 'editapp/recordadd.html',
         {
             'form': form,
             'domain': domainname,
@@ -256,7 +263,7 @@ def dologout(request):
     log out, return to main screen
     """
     logout(request)
-    return redirect("/login/?next=/dnsedit/")
+    return redirect("/login/?next=/edit/")
 
 @login_required
 def testview(request):
@@ -275,7 +282,7 @@ def testview(request):
         form = RRForm("PARP MX 1 this.that")
 
 
-    return render(request, 'dnsedit/test.html',
+    return render(request, 'editapp/test.html',
         {
             'kvetch': kvetch,
             'form': form,
@@ -295,11 +302,11 @@ def bpnav(request, here):
             return "<li><a href=\"{}\">{}</a></li>\n".format(page,desc)
 
     bo = "<ul id=tabnav>\n"
-    bo += bp("/dnsedit","Home")
-    bo += bp("/dnsedit/create","Create a domain")
-#    bo += bp("/dnsedit/test","Test something")
+    bo += bp("/edit","Home")
+    bo += bp("/edit/create","Create a domain")
+#    bo += bp("/edit/test","Test something")
     bo += bp("/admin","Admin")
-    bo += bp("/logout?next=/dnsedit", "Logout")
+    bo += bp("/logout?next=/edit", "Logout")
     bo += "</ul>\n<p align=right>Logged in as " + request.user.username
     if request.user.has_perm('dnsedit.see_all'):
         bo += " (all)"

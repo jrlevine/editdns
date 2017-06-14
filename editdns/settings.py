@@ -20,7 +20,7 @@ SECRET_KEY = '*c2^y3ejf!kbm)qt4gj-0%%b&528hgo3^$0!zv17s%o66pt4k^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["testserver","editapp.standcore.com", "127.0.0.1"]
+ALLOWED_HOSTS = ["testserver","editapp.standcore.com", "127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -72,11 +72,11 @@ WSGI_APPLICATION = 'editdns.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'djdns',
+        'NAME': 'editdns',
         'TEST': {
-            'NAME': 'test_djdns',
+            'NAME': 'test_editdns',
         },
-        'USER': 'djdns',
+        'USER': 'editdns',
         'PASSWORD': 'hostsdottxt',
     }
 }

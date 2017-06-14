@@ -1,0 +1,40 @@
+{% extends "editapp/base.html" %}
+{% block title %}DNS zone editor{% endblock %}
+
+{% block content %}
+<h1>Available domains</h1>
+<center>
+   <table class="x">
+      <tr>
+	 <td class="x">
+	    <p>{% for d in c1 %}
+	       <a href="/edit/edit/{{d}}">{{d}}</a><br/>
+	       {% endfor %}
+	    </p>
+	 </td>
+	 <td class="x">
+	    <p>{% for d in c2 %}
+	       <a href="/edit/edit/{{d}}">{{d}}</a><br/>
+	       {% endfor %}
+	    </p>
+	 </td>
+	 <td class="x">
+	    <p>{% for d in c3 %}
+	       <a href="/edit/edit/{{d}}">{{d}}</a><br/>
+	       {% endfor %}
+	    </p>
+	 </td>
+	 <td class="x">
+	    <p>{% for d in c4 %}
+	       <a href="/edit/edit/{{d}}">{{d}}</a><br/>
+	       {% endfor %}
+	    </p>
+	 </td>
+      </tr>
+   </table>
+</center>
+
+{% endblock %}
+
+
+   

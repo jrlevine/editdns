@@ -1,0 +1,37 @@
+{% extends "editapp/base.html" %}
+{% block title %}Edit a domain{% endblock %}
+{% load staticfiles %}
+
+{% block content %}
+<h1>Edit a domain</h1>
+<blockquote>
+    <table>
+       <form action="{% url 'editapp:edit' domain %}" method="post">
+	  {% csrf_token %}
+	  {{ form }}
+	  <tr><td colspan=2 align="right">
+	     <input type="submit" value="Submit" />
+	     <input type="submit" name="block" value="Block edit" />
+	     </td></tr>
+	  </form>
+
+       {% for seq, valid, rtxt in rrview %}
+       <tr><th><a href="{% url 'editapp:record' domain seq %}">
+	  {% if valid %}<img src="{% static "ball.gray.png" %}">
+	  {% else %}<img src="{% static "burst.png" %}">
+	  {% endif %}</a>
+	  </th>
+       <td>{{rtxt}}</td></tr>
+       {% endfor %}
+
+       <tr><th>New record:</th><td>
+	  <form action="{% url 'editapp:recordadd' domain %}" method="post"> 
+	     {% csrf_token %}
+	     {{ addspinner|safe }}
+	     <input type="submit" value="Add" />
+	  </form>
+	  </td></tr>
+    </table>
+</blockquote>
+
+{% endblock %}
