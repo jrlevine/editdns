@@ -92,6 +92,7 @@ def editblockview(request, domainname, postok=True):
             dom.rrs=cd['rrs']
             dom.updated = timezone.now()
             dom.save()
+            return editview(request, domainname, postok=False)
         # otherwise fall through to edit again
     else:
         form = DomainForm(initial={'domain': dom.domain, 'owner': dom.owner.username, 'rrs': dom.rrs})

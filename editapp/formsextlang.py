@@ -44,8 +44,9 @@ class RRField(forms.CharField):
     a validated text field of RRs
     """
     def __init__(self, *args, **kwargs):
-        super(RRField, self).__init__(*args, **kwargs, widget=Textarea,
-            validators=[validate_rrs], help_text = "DNS records for a zone")
+        super(RRField, self).__init__(widget=Textarea,
+            validators=[validate_rrs], help_text = "DNS records for a zone",
+            *args, **kwargs)
 
 ################
 # create a form on the fly for the fields in an RR
@@ -195,7 +196,7 @@ class RRForm(forms.Form):
         if 'rrname' in kwargs:          # new empty record
             rrname = kwargs['rrname']
             del kwargs['rrname']
-            super(RRForm, self).__init__(**kwargs, initial = { 'rrname0': rrname })
+            super(RRForm, self).__init__(initial = { 'rrname0': rrname }, **kwargs)
 
             # make an empty RR of the right type
             self.rec = Extrec(extxl, rrtype=rrname)
@@ -215,9 +216,8 @@ class RRForm(forms.Form):
             self.rec = Extrec(extxl, rr)
         
             # populate common fields with values from the rr
-            super(RRForm, self).__init__(**kwargs,
-                initial = { 'name': self.rec.name, 'ttl': self.rec.ttl,
-                    'rrname0': self.rec.rr.rrname })
+            super(RRForm, self).__init__(initial = { 'name': self.rec.name, 'ttl': self.rec.ttl,
+                    'rrname0': self.rec.rr.rrname }, **kwargs)
 
             # visible field if form will be displayed
             # added here due to binding problem noted below
